@@ -1,0 +1,18 @@
+{% extends "base.html.j2" %}
+
+{% block body %}
+    <h1>{{username}}'s Decks</h1>
+    <form action="decks" method="POST">
+        <input type="submit" value="New deck!">
+    </form>
+    <div class="grid-container2">
+        {% for deck in deckData %}
+            <div class="card">
+                <img class="cover-img" src="{{deck["cover_image"]}}" alt="{{deck["name"]}}">
+                <div>
+                    <a href="deck?name={{deck["name"]}}">{{deck["name"]}}</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

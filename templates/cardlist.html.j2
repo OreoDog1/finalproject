@@ -1,0 +1,43 @@
+{% extends "base.html.j2" %}
+
+{% block head %}
+
+{% endblock %}
+{% block body %}
+{% if cards | length == 0 %}
+    <h2>Sorry, there were no cards found with these parameters.</h2> <a href="browse">Go back.</a>
+{% else %}
+    <div class="controls">
+        <select name="sort" id="sorter" onchange="sort();">
+            <option value="name">Name (A {{arrow}} Z)</option>
+            <option value="released"> Release date (Oldest {{arrow}} Newest)</option>
+            <option value="rarity">Rarity (Common {{arrow}} Mythic)</option>
+            <option value="color">Color (W {{arrow}} U {{arrow}} B {{arrow}} R {{arrow}} G {{arrow}} Multicolor {{arrow}} Colorless {{arrow}} Land)</option>
+            <option value="usd">Price (Lowest {{arrow}} Highest)</option>
+            <option value="cmc">Mana value (Lowest {{arrow}} Highest)</option>
+        </select>
+        <button onclick="changeOrder();">Change order!</button>
+    </div>
+    <div class="grid-container">
+        {% for card in cards %}
+            {% if card["layout"] == "normal" %}
+                <div class="card">
+                    <img src={{ card["image_uris"]["large"] }} alt="{{card["name"]}}" width="200px">
+                    <a href="cards?name={{card["name"]}}">{{card["name"]}}</a>
+                    <div class="price">
+                        {% if card["prices"]["usd"] %}
+                            <p>${{card["prices"]["usd"]}}</p>
+                        {% else %}
+                            <p>$-</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <script>
+        var sortValue = "{{sortValue}}";
+        setSelectValue(sortValue);
+    </script>
+{% endif %}
+{% endblock %}

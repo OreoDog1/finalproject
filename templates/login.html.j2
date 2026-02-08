@@ -1,0 +1,16 @@
+{% extends "base.html.j2" %}
+
+{% block body %}
+    <h1>Log in!</h1>
+    <div id="login">
+        <form action="login" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+            <input type="submit" value="Submit!">
+            <br>
+            <a href="signup"><b>Don't have an account? Sign up here!</b></a>
+        </form>
+    </div>
+{% endblock %}

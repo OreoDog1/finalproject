@@ -1,0 +1,13 @@
+{% extends "base.html.j2" %}
+
+{% block body %}
+
+<div class="search-container">
+    <h1 class="title">Search For a Magic Card</h1>
+    <div class="search-box">
+        <textarea id="cardName" oninput="autocompleteCard();" placeholder="Enter card name..." class="search-input"></textarea>
+        <ul id="autocompleteValues" class="autocomplete-list"></ul>
+    </div>
+</div>
+
+{% endblock %}

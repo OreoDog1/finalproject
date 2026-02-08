@@ -1,0 +1,43 @@
+{% extends "base.html.j2" %}
+
+{% block body %}
+    <div id="deck-name-container"><h1 id="deck-name">{{deckName}} <img id ="edit-image" onclick="openEdit()" src="static/edit.png" alt="Change name" width="35px"></h1></div>
+    <div id="deckContainer">
+        <div id="deck-info">
+            <h3>Total Cards: {{numCards}}</h3>
+            <div id="format-container"><h3>Format:</h3>
+            <select name="format" id="change-format" onchange="changeFormat();">
+                <option>{{deckFormat.capitalize()}}</option>
+                {% for legality in ["Standard", "Alchemy", "Explorer", "Timeless", "Pioneer", "Modern", "Legacy", "Vintage", "Pauper"] %}
+                    {% if legality != deckFormat.capitalize()%}
+                        <option value="{{legality.lower()}}">{{legality}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            </div>
+            <h3>${{'%0.2f'|format(totalPrice)}}</h3>
+            <button onclick="exportToArena();">Export to Arena</button>
+        </div>
+        <hr>
+        {% for type in cardData %}
+            {% if cardData[type][0] > 0 %}
+            <b class="type-header">{{type}} ({{cardData[type][0]}})</b>
+            {% for card in cardData[type][1:] %}
+            <div class="flexbox">
+                <div>{{card["quantity"]}}</div>
+                <div class="cardContainer">
+                    <div class="name"><a href="cards?name={{card["name"]}}">{{card["name"]}}</a><img src="{{card["image"]}}" alt="{{card["name"]}}" class="hover-img"></div><div class="mana-cost-positioning mana-cost">{{card["mana_cost"]}}</div><div class="price-positioning">${{'%0.2f'|format(card["quantity"] * card["price"] |float)}}</div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif%}
+        {% endfor %}
+        {% if not allLegal %}
+            <div class="error">Note: Some cards in this deck are not legal in the deck's format. Please revise before using this deck.</div>
+        {% endif %}
+        {% if numCards < 60 %}
+            <div class="error">Note: This deck does not meet the minimum deck size of 60 cards. Please revise before using this deck.</div>
+        {% endif %}
+    </div>
+    <script>textToMana();</script>
+{% endblock %}

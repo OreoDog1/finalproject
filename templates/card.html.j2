@@ -1,0 +1,65 @@
+{% extends "base.html.j2" %}
+
+{% block body %}
+    <h1>{{card["name"]}}</h1>
+    <div id="section">
+        <div>
+            <div id="image-container">
+                <img id="card" src="{{card["image_uris"]["large"]}}" alt="{{card["name"]}}">
+            </div>
+            {% if username %}
+                <form id="deck-adder" method="POST" action="addToDeck">
+                    <select name="deck">
+                        {% for deck in decks %}
+                            <option value="{{deck["id"]}}">{{deck["name"]}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="inline">
+                        <input type="hidden" name="cardName" value="{{card["name"]}}">
+                        <input type="submit" id="add-to-deck" value="Add to deck!">
+                        <input required id="quantity" type="number" min="1" max="60" name="quantity" placeholder="Quantity">
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+        <div id="card-data">
+            <div id="header-container">
+                <div id="header-name">{{card["name"]}}  
+                    <div class="mana-cost header-mana-cost">
+                        {{card["mana_cost"]}}
+                    </div>
+                </div>
+                {% if card["prices"]["usd"]%}
+                <div>
+                    <h2 id="header-price">${{card["prices"]["usd"]}}</h2>
+                </div>
+                {% endif %}
+            </div>
+            <div id="type-line">
+                {{card["type_line"]}}
+            </div>
+            <hr>
+            <div id="oracle-text">{{card["oracle_text"]}}</div>
+            <hr>
+            <div id="card-stats">
+                <div>{{card["rarity"].capitalize()}}</div>
+                {% if "Creature" in card["type_line"] %}
+                    <div id="power-toughness-loyalty">{{card["power"]}}/{{card["toughness"]}}</div>
+                {% elif "Planeswalker" in card["type_line"]%}
+                    <div id="power-toughness-loyalty">{{card["loyalty"]}}</div>
+                {% endif %}
+            </div>
+            <hr>
+            <div id="legalities">
+                {% for legality in ["Standard", "Alchemy", "Explorer", "Timeless", "Pioneer", "Modern", "Legacy", "Vintage", "Pauper"] %}
+                    {% if card["legalities"][legality.lower()] == "legal" %}
+                        <div id="legality-container"><div class="format">{{legality}}</div> <div class="legality">Legal</div></div>
+                    {% else %}
+                        <div id="legality-container"><div class="format">{{legality}}</div> <div class="legality">Not Legal</div></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script>textToMana();</script>
+{% endblock %}

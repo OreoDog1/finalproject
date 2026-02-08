@@ -1,0 +1,111 @@
+{% extends "base.html.j2" %}
+{% block head %}
+<script>
+// ChatGPT made all of this
+document.addEventListener('DOMContentLoaded', () => {
+  const select = document.getElementById('multi-select');
+  const display = document.getElementById('multi-select-display');
+  const optionsContainer = document.getElementById('multi-select-options');
+
+  // Populate the custom dropdown with the <select> options
+  Array.from(select.options).forEach((option) => {
+    const li = document.createElement('li');
+    li.textContent = option.text;
+    li.dataset.value = option.value;
+    optionsContainer.appendChild(li);
+  });
+
+  // Toggle dropdown display
+  display.addEventListener('click', () => {
+    optionsContainer.style.display =
+      optionsContainer.style.display === 'block' ? 'none' : 'block';
+  });
+
+  // Add/remove items on click
+  optionsContainer.addEventListener('click', (e) => {
+    if (e.target.tagName === 'LI') {
+      const item = e.target;
+      const value = item.dataset.value;
+
+      // Toggle the selected state
+      if (item.classList.contains('selected')) {
+        item.classList.remove('selected');
+        select.querySelector(`option[value="${value}"]`).selected = false;
+      } else {
+        item.classList.add('selected');
+        select.querySelector(`option[value="${value}"]`).selected = true;
+      }
+
+      updateDisplay();
+    }
+  });
+
+  // Update display with selected items
+  function updateDisplay() {
+    const selectedOptions = Array.from(select.selectedOptions).map(
+      (opt) => opt.text
+    );
+    display.textContent =
+      selectedOptions.length > 0 ? selectedOptions.join(', ') : 'Select items';
+  }
+
+  // Close dropdown if clicking outside
+  document.addEventListener('click', (e) => {
+    if (!document.getElementById('multi-select-container').contains(e.target)) {
+      optionsContainer.style.display = 'none';
+    }
+  });
+});
+</script>
+
+{% endblock %}
+
+{% block body %}
+<div class="page-wrapper">
+    <h1>Find New Cards!</h1>
+    <form action="filter" method="GET">
+        <input type="checkbox" name="color" value="W">
+        <i class="ms ms-w ms-cost ms-shadow"></i>
+        <input type="checkbox" name="color" value="U">
+        <i class="ms ms-u ms-cost ms-shadow"></i>
+        <input type="checkbox" name="color" value="B">
+        <i class="ms ms-b ms-cost ms-shadow"></i>
+        <input type="checkbox" name="color" value="R">
+        <i class="ms ms-r ms-cost ms-shadow"></i>
+        <input type="checkbox" name="color" value="G">
+        <i class="ms ms-g ms-cost ms-shadow"></i>
+        {# Made by ChatGPT #}
+        <div id="multi-select-container">
+            <select id="multi-select" name="set" multiple>
+                {% for set in sets %}
+                    <option value="{{set[1]}}">{{set[0]}} ({{set[1].upper()}})</option>
+                {% endfor %}
+            </select>
+            <div id="multi-select-display" class="dropdown-display">Select sets</div>
+            <ul id="multi-select-options" class="dropdown-options"></ul>
+        </div>
+        <input type="number" min="0" max="20" name="cmc" placeholder="Mana value">
+        
+        <select name="rarity">
+            <option disabled selected value>Rarity</option>
+            <option value="c">Common</option>
+            <option value="u">Uncommon</option>
+            <option value="r">Rare</option>
+            <option value="m">Mythic</option>
+        </select>
+        <select name="type">
+            <option disabled selected value>Card Type</option>
+            <option value="land">Land</option>
+            <option value="creature">Creature</option>
+            <option value="artifact">Artifact</option>
+            <option value="enchantment">Enchantment</option>
+            <option value="planeswalker">Planeswalker</option>
+            <option value="battle">Battle</option>
+            <option value="instant">Instant</option>
+            <option value="sorcery">Sorcery</option>
+        </select>
+        <input type="text" name="cardText" placeholder="Card text">
+        <input type="submit" value="Submit!">
+    </form>
+</div>
+{% endblock %}

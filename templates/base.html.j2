@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="static/style.css">
+        <link href="//cdn.jsdelivr.net/npm/mana-font@latest/css/mana.css" rel="stylesheet" type="text/css" />
+        <title>Magic: The Gathering Deckbuilder</title>
+        <link rel="icon" type="image/x-icon" href="/static/logo.png">
+        <script src="static/functions.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        {% block head %}
+        {% endblock %}
+    </head>
+    <body>
+        <div class="header">
+            <nav>
+                <img src="static/logo.png" class="logo" alt="Leyline Lab Logo">
+                <ul class="nav-links">
+                    <li><a href="browse">Browse</a></li>
+                    <li><a href="search">Search</a></li>
+                    {% if username %}
+                        <li><a href="decks">My Decks</a></li>
+                    {% endif %}
+                    {% if not username %}
+                        <li><a href="login" id="login-button">Login!</a></li>
+                    {% else %}
+                        <li><a id="login-button" href="logout">{{username}}</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        <div id="content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{category}} alert-dismissible">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            {{message}}
+                        </div>          
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block body %}{% endblock %}
+        <div class="content"></div>
+    </body>
+</html>
