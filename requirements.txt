@@ -2,4 +2,3 @@ datetime
 flask
 flask_mysqldb
 requests
-werkzeug.security
