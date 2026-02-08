@@ -1,1 +1,6 @@
-
+datetime
+flask
+flask_mysqldb
+json
+requests
+werkzeug.security
